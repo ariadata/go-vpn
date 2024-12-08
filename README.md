@@ -28,7 +28,9 @@ ip route add default via {VPN_SERVER_PRIVATE_IP} dev go-vpn
 ### example : ip route add default via 172.18.0.1 dev go-vpn
 iptables -t nat -A POSTROUTING -o go-vpn -j MASQUERADE
 iptables-save > /etc/iptables/rules.v4
-netfilter-persistant save
+
+# apt install -y netfilter-persistent
+netfilter-persistent save
 
 ```
 
