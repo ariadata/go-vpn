@@ -18,6 +18,8 @@ The server installer will:
 
 ### Client Side
 ```bash
+apt install -y netfilter-persistent iptables
+systemctl enable --now netfilter-persistent
 bash <(curl -sSL https://raw.githubusercontent.com/ariadata/go-vpn/main/installer-client.sh)
 
 # for whole system :
@@ -26,10 +28,6 @@ bash <(curl -sSL https://raw.githubusercontent.com/ariadata/go-vpn/main/installe
 sysctl -w net.ipv4.ip_forward=1
 echo "net.ipv4.ip_forward=1" | tee /etc/sysctl.d/99-ip-forward.conf
 sysctl -p /etc/sysctl.d/99-ip-forward.conf
-
-
-apt install -y netfilter-persistent iptables
-systemctl enable --now netfilter-persistent
 
 ip route add 195.201.194.199 via 192.168.100.1 dev eth0
 ip route del default
