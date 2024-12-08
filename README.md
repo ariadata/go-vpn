@@ -21,17 +21,24 @@ The server installer will:
 bash <(curl -sSL https://raw.githubusercontent.com/ariadata/go-vpn/main/installer-client.sh)
 
 # for whole system :
-ip route add {VPN_SERVER_PUBLIC_IP} via {DEFAULT_GATEWAY} dev eth0
-### example : ip route add 78.58.16.221 via 192.168.100.1 dev eth0
+# Add net.ipv4.ip_forward=1 end of /etc/sysctl.conf
+# Or :
+sysctl -w net.ipv4.ip_forward=1
+echo "net.ipv4.ip_forward=1" | tee /etc/sysctl.d/99-ip-forward.conf
+sysctl -p /etc/sysctl.d/99-ip-forward.conf
+
+
+apt install -y netfilter-persistent iptables
+systemctl enable --now netfilter-persistent
+
+ip route add 195.201.194.199 via 192.168.100.1 dev eth0
 ip route del default
-ip route add default via {VPN_SERVER_PRIVATE_IP} dev go-vpn
-### example : ip route add default via 172.18.0.1 dev go-vpn
+ip route add default via 172.18.0.1 dev go-vpn
 iptables -t nat -A POSTROUTING -o go-vpn -j MASQUERADE
 iptables-save > /etc/iptables/rules.v4
 
-# apt install -y netfilter-persistent
-netfilter-persistent save
 
+netfilter-persistent save
 ```
 
 The client installer will:
