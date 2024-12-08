@@ -1,0 +1,29 @@
+services:
+  go-vpn-client:
+    image: 'ghcr.io/ariadata/go-vpn:latest'
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: go-vpn-client
+    restart: unless-stopped
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun
+    network_mode: "host"
+    environment:
+      - SERVER_IP=${SERVER_IP}
+      - SERVER_PORT=${SERVER_PORT}
+      - CLIENT_CIDR=${CLIENT_CIDR}
+      - SHARED_KEY=${SHARED_KEY}
+      - INTERFACE=${INTERFACE:-eth0}
+    healthcheck:
+      test: ["CMD", "ping", "-c", "1", "-W", "1", "${SERVER_INTERNAL_IP}"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"

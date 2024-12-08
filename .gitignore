@@ -1,0 +1,12 @@
+*.dll
+*.so
+*.dylib
+*.test
+go-vpn
+*.out
+.env
+.glide/
+.idea/
+logs/
+bin/
+
